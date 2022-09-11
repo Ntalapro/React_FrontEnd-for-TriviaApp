@@ -13,11 +13,7 @@ class QuizView extends Component {
       showAnswer: false,
       categories: {},
       numCorrect: 0,
-      currentQuestion: {'0':{'id': 15, 
-                        'question': 'The Taj Mahal is located in which Indian city?', 
-                        'answer': 'Agra',
-                        'category': 3,
-                        'difficulty': 2}},
+      currentQuestion: {},
       guess: '',
       forceEnd: false,
     };
@@ -53,7 +49,7 @@ class QuizView extends Component {
     }
 
     $.ajax({
-      url: `/play/quizzes?previousQuestions=${this.state.previousQuestions}&category=${this.state.quizCategory.id}`, //TODO: update request URL
+      url: `/play/quizzes?previousQuestions=${previousQuestions}&category=${this.state.quizCategory.id}`, //TODO: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
@@ -68,10 +64,10 @@ class QuizView extends Component {
       success: (result) => {
         this.setState({
           showAnswer: false,
-          previousQuestions: result.previousQuestions,
+          previousQuestions: previousQuestions,
           currentQuestion: result.question,
           guess: '',
-          forceEnd: result.question ? false : true,
+          forceEnd: Object.keys(result.question).length !== 0 ? false : true,
         });
         return;
       },
